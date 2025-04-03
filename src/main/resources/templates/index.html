@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Appointments</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: #f5f7fa;
+            padding: 2rem;
+            min-height: 100vh;
+        }
+
+        h1 {
+            color: #2d3748;
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 2.5rem;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        h2 {
+            color: #2d3748;
+            margin: 2rem 0;
+            font-size: 1.8rem;
+            animation: fadeInLeft 0.8s ease-out;
+        }
+
+        form {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            margin: 0 auto;
+            animation: slideUp 0.8s ease-out;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .form-group input[type="text"] {
+            padding-right: 2.5rem;
+        }
+
+        /* .form-group::after {
+            content: "ID";
+            position: absolute;
+            right: 1rem;
+            top: 2.5rem;
+            color: #718096;
+            font-size: 0.875rem;
+        } */
+
+        /* .student-id-field::after { */
+            /* content: "ID"; */
+        /* } */
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #4a5568;
+            font-weight: 500;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #4299e1;
+            box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.2);
+        }
+
+        button {
+            background: #4299e1;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background: #3182ce;
+            transform: translateY(-2px);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        th {
+            background: #f7fafc;
+            color: #4a5568;
+            font-weight: 600;
+        }
+
+        tr:hover {
+            background: #f7fafc;
+        }
+
+        a {
+            color: #e53e3e;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        a:hover {
+            color: #c53030;
+            text-decoration: underline;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .time-select-container {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .time-select {
+            flex: 1;
+        }
+
+        .time-separator {
+            font-size: 1.5rem;
+            color: #4a5568;
+            margin: 0 0.5rem;
+        }
+
+        select {
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 0.75rem center;
+            background-size: 1em;
+            padding-right: 2.5rem;
+        }
+
+        .student-id-field {
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .student-id-field::placeholder {
+            text-transform: none;
+        }
+
+        .error-message {
+            color: #e53e3e;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+            display: none;
+        }
+
+        .form-group.error input {
+            border-color: #e53e3e;
+        }
+
+        .form-group.error .error-message {
+            display: block;
+        }
+    </style>
+
+    <script>
+        function generateTimeOptions(startTime, endTime) {
+            const options = [];
+            for (let hour = startTime; hour <= endTime; hour++) {
+                for (let minute = 0; minute < 60; minute++) {
+                    const time = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
+                    options.push(time);
+                }
+            }
+            return options;
+        }
+
+        function fetchBookedTimes() {
+            const selectedDate = $('#date').val();
+            const hourSelect = $('#hour');
+            const minuteSelect = $('#minute');
+
+            if (!selectedDate) return;
+
+            $.ajax({
+                url: '/api/booked-times',
+                type: 'GET',
+                data: { date: selectedDate },
+                success: function(bookedTimes) {
+                    // Clear existing options
+                    hourSelect.empty();
+                    minuteSelect.empty();
+
+                    // Add default options
+                    hourSelect.append('<option value="">Hour</option>');
+                    minuteSelect.append('<option value="">Minute</option>');
+
+                    // Create a map of booked times for easier checking
+                    const bookedTimesMap = new Map();
+                    bookedTimes.forEach(time => {
+                        const [hours, minutes] = time.split(':');
+                        if (!bookedTimesMap.has(hours)) {
+                            bookedTimesMap.set(hours, new Set());
+                        }
+                        bookedTimesMap.get(hours).add(minutes);
+                    });
+
+                    // Generate hours (9 AM to 5 PM)
+                    for (let hour = 9; hour <= 17; hour++) {
+                        const hourValue = hour.toString().padStart(2, '0');
+                        const option = $('<option>').val(hourValue).text(hourValue);
+                        
+                        // Check if all minutes in this hour are booked
+                        const bookedMinutesInHour = bookedTimesMap.get(hourValue) || new Set();
+                        if (bookedMinutesInHour.size < 60) {
+                            // Only add the hour if there are available minutes
+                            hourSelect.append(option);
+                        }
+                    }
+
+                    // Generate minutes (00 to 59)
+                    for (let minute = 0; minute < 60; minute++) {
+                        const minuteValue = minute.toString().padStart(2, '0');
+                        const option = $('<option>').val(minuteValue).text(minuteValue);
+                        minuteSelect.append(option);
+                    }
+
+                    // Update minute options when hour is selected
+                    $('#hour').on('change', function() {
+                        const selectedHour = $(this).val();
+                        if (!selectedHour) {
+                            minuteSelect.find('option').prop('disabled', false);
+                            return;
+                        }
+
+                        const bookedMinutesInHour = bookedTimesMap.get(selectedHour) || new Set();
+                        minuteSelect.find('option').each(function() {
+                            const minuteValue = $(this).val();
+                            if (minuteValue && bookedMinutesInHour.has(minuteValue)) {
+                                $(this).prop('disabled', true);
+                            } else {
+                                $(this).prop('disabled', false);
+                            }
+                        });
+                    });
+                },
+                error: function(error) {
+                    console.error('Error fetching booked times:', error);
+                }
+            });
+        }
+
+        function updateTimeField() {
+            const hour = $('#hour').val();
+            const minute = $('#minute').val();
+            if (hour && minute) {
+                $('#time').val(`${hour}:${minute}`);
+            } else {
+                $('#time').val('');
+            }
+        }
+
+        function validateStudentId() {
+            const studentId = $('#studentId');
+            const studentIdValue = studentId.val();
+            const formGroup = studentId.closest('.form-group');
+            const errorMessage = formGroup.find('.error-message');
+
+          
+            const cleanValue = studentIdValue.replace(/[^A-Z0-9]/g, '').toUpperCase();
+            
+            
+            if (cleanValue !== studentIdValue) {
+                studentId.val(cleanValue);
+            }
+
+            // Validate length
+            if (cleanValue.length > 11) {
+                formGroup.addClass('error');
+                errorMessage.text('Student ID must be 11 characters or less');
+                return false;
+            }
+
+            // Validate format (only letters and numbers)
+            if (cleanValue && !/^[A-Z0-9]+$/.test(cleanValue)) {
+                formGroup.addClass('error');
+                errorMessage.text('Student ID can only contain letters and numbers');
+                return false;
+            }
+
+            formGroup.removeClass('error');
+            errorMessage.text('');
+            return true;
+        }
+
+        $(document).ready(function() {
+            $('#date').on('change', fetchBookedTimes);
+            $('#hour, #minute').on('change', updateTimeField);
+
+            // Add student ID validation
+            $('#studentId').on('input', function() {
+                validateStudentId();
+            });
+
+            // Validate form submission
+            $('form').on('submit', function(e) {
+                if (!validateStudentId()) {
+                    e.preventDefault();
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+<h1>Book an Appointment</h1>
+<form th:action="@{/save}" method="post" th:object="${appointment}">
+    <input type="hidden" th:field="*{id}" />
+    <input type="hidden" id="time" name="time" th:field="*{time}" />
+
+    <div class="form-group">
+        <label for="studentId">Student ID:</label>
+        <input type="text" 
+               id="studentId" 
+               th:field="*{studentId}" 
+               placeholder="Enter your student ID (Captial Lettes only)" 
+               required 
+               class="student-id-field"
+               maxlength="11"
+               pattern="[A-Z0-9]{1,11}"
+               title="Student ID must be 11 characters or less and can only contain uppercase letters and numbers">
+        <div class="error-message"></div>
+    </div>
+
+    <div class="form-group">
+        <label for="name">Name:</label>
+        <input type="text" id="name" th:field="*{name}" placeholder="Enter your name" required>
+    </div>
+
+    <div class="form-group">
+        <label for="date">Date:</label>
+        <input type="date" id="date" th:field="*{date}" required>
+    </div>
+
+    <div class="form-group">
+        <label>Time:</label>
+        <div class="time-select-container">
+            <select id="hour" class="time-select" required>
+                <option value="">Hour</option>
+            </select>
+            <span class="time-separator">:</span>
+            <select id="minute" class="time-select" required>
+                <option value="">Minute</option>
+            </select>
+        </div>
+    </div>
+
+    <button type="submit">Book Appointment</button>
+</form>
+
+
+</body>
+</html>
