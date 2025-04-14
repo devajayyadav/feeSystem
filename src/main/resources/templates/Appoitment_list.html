@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Appointments</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
+     <link rel="stylesheet" href="app_list.css">
+    <script>
+        function refreshAppointments() {
+            location.reload();
+        }
+
+        function searchAppointments() {
+            let searchQuery = document.getElementById("search").value.toLowerCase();
+            let rows = document.querySelectorAll("table tr:not(:first-child)");
+            let count = 0;
+            
+            rows.forEach((row, index) => {
+                let studentId = row.cells[0].textContent.toLowerCase();
+                let name = row.cells[1].textContent.toLowerCase();
+                let time = row.cells[3].textContent.toLowerCase();
+                
+                if (studentId.includes(searchQuery) || name.includes(searchQuery) || time.includes(searchQuery)) {
+                    row.style.display = "table-row";
+                    row.style.opacity = "0";
+                    row.style.transform = "translateX(-50px)";
+                    setTimeout(() => {
+                        row.style.animation = "slideIn 0.5s ease-in-out forwards";
+                    }, index * 100);
+                    count++;
+                } else {
+                    row.style.display = "none";
+                }
+            });
+            document.getElementById("count").textContent = `Total Appointments: ${count}`;
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            document.getElementById("search").addEventListener("input", searchAppointments);
+            searchAppointments(); // Initialize count on load
+        });
+    </script>
+</head>
+<body>
+    <div class="list-container">
+        <div class="controls">
+            <input type="text" id="search" placeholder="Search by Name, Student ID, or Time...">
+            <button class="refresh-btn" onclick="refreshAppointments()">
+                <i class="fas fa-sync-alt"></i>
+            </button>
+            <span id="count" class="count">Total Appointments: 0</span>
+        </div>
+        <table>
+            <tr>
+                <th>Student ID</th>
+                <th>Name</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Actions</th>
+            </tr>
+            <tr th:each="appointment, iterStat : ${appointments}" th:style="'animation-delay:' + (${iterStat.index} * 0.1) + 's'">
+                <td th:text="${appointment.studentId}"></td>
+                <td th:text="${appointment.name}"></td>
+                <td th:text="${appointment.date}"></td>
+                <td th:text="${appointment.time}"></td>
+                <td>
+                    <a th:href="@{/delete/{id}(id=${appointment.id})}">Delete</a>
+                </td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>
