@@ -41,7 +41,7 @@ public class AppointmentController {
         service.deleteAppointment(id);
         return "redirect:/";
     }
-
+    // edit the appoitment 
     // @GetMapping("/edit/{id}")
     // public String editAppointment(@PathVariable Long id, Model model) {
     //     Appointment appointment = service.getAppointmentById(id);
@@ -50,3 +50,4 @@ public class AppointmentController {
     //     return "index";
     // }
 }
+
