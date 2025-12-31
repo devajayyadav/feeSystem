@@ -128,9 +128,3 @@ Java & Spring Boot Developer
 * Docker | Git | Linux
 
 ---
-
-
-
-
-
-Just tell me 😊
